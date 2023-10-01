@@ -1,8 +1,7 @@
 # kaggle-torch
 
 Project contains some solutions to kaggle medical image datasets. These solutions
-are provided mainly as examples. I personally dislike jypunter notebooks (they encourage to bad coding practice), so
-all scripts are implemented as terminal programs.
+are provided mainly as examples. All scripts are implemented as terminal programs.
 
 ## Installation
 
@@ -16,7 +15,9 @@ pip install -r requirements.txt
 
 ## Brain tumor
 
-Run as module
+Download data from [brain tumor](https://www.kaggle.com/datasets/jakeshbohaju/brain-tumor) and extract.
+
+Run script as module
 
 ```
 python -m scripts.brain_tumor -lr 1e-4 \
