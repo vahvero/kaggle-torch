@@ -1,7 +1,7 @@
 # kaggle-torch
 
 Project contains some solutions to kaggle medical image datasets. These solutions
-are provided mainly as examples. I personally dislike jupynter notebooks, so
+are provided mainly as examples. I personally dislike jypunter notebooks (they encourage to bad coding practice), so
 all scripts are implemented as terminal programs.
 
 ## Installation
@@ -25,7 +25,7 @@ python -m scripts.brain_tumor -lr 1e-4 \
     --outfolder runs/brain_tumor
 ```
 
-This should produce a test accuracy of 99.20% or similar
+This should produce a test accuracy of 99.20%
 and a test confusion matrix similar to
 
 ![confusion matrix](images/brain_tumor_testset_confusion_matrix.png)
