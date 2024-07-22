@@ -41,6 +41,10 @@ View script options with
 python -m scripts.brain_tumor --help
 ```
 
+## Blood semear
+
+
+
 ## Authors
 
 - [vahvero](https://github.com/vahvero)

@@ -1,4 +1,5 @@
 """Brain tumor binary training functions"""
+
 import argparse
 import logging
 import os
@@ -181,7 +182,7 @@ def launch_training(
     """Run brain tumor training
 
     Args:
-        kwargs (BrainTumorTrainingKwargs): _description_
+        kwargs (BrainTumorTrainingKwargs): Training arguments
 
     Returns:
         tuple[nn.Module, TrainingMonitor, float, torch.Tensor]: Model with best weights,

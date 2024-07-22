@@ -1,23 +1,82 @@
 """Visualization utility functions"""
+
 from matplotlib.axis import Axis
 from matplotlib.figure import Figure
 import torch
 from torch.utils.data import Dataset
 from matplotlib import pyplot as plt
 from torchvision.transforms.functional import to_pil_image
+from torchvision.utils import draw_bounding_boxes
 import seaborn as sb
 
+from enum import StrEnum, auto
 
-def square_gallery(dataset: Dataset, box_width: int) -> tuple[Figure, Axis]:
+
+class DatasetTypeEnum(StrEnum):
+    """Supported dataset types
+
+
+    >>> DatasetTypeEnum.DETECTION == 'detection'
+    True
+    >>> DatasetTypeEnum.CLASSIFICATION == 'detection'
+    False
+    >>> DatasetTypeEnum.CLASSIFICATION == DatasetTypeEnum.CLASSIFICATION
+    True
+    """
+
+    DETECTION = auto()
+    CLASSIFICATION = auto()
+    MASK = auto()
+
+
+def square_gallery(
+    dataset: Dataset,
+    box_width: int,
+    dataset_type: DatasetTypeEnum | str = DatasetTypeEnum.DETECTION,
+) -> tuple[Figure, Axis]:
     """Create image gallery
 
     Args:
         dataset (Dataset): Image dataset
         box_width (int): Image square width
+        dataset_type (str | DatasetTypeEnum): Dataset type, eg. 'classification' or DatasetTypeEnum.CLASSIFICATION
 
     Returns:
         tuple[Figure, Axis]: Images' figure and axis
     """
+    # StrEnums can be compared to str directly
+    match dataset_type:
+        case DatasetTypeEnum.DETECTION:
+            return _square_gallery_detection(dataset, box_width)
+        case DatasetTypeEnum.MASK:
+            return _square_gallery_mask(dataset, box_width)
+        case DatasetTypeEnum.CLASSIFICATION:
+            return _square_gallery_classification(dataset, box_width)
+    raise NotImplementedError(f"Unrecogized dataset type '{dataset_type}'")
+
+
+def _square_gallery_detection(dataset: Dataset, box_width: int):
+    fig, axis = plt.subplots(nrows=box_width, ncols=box_width)
+    idx_last = box_width**2 - 1
+    for idx, (img, (boxes, labels)) in enumerate(dataset):
+        ax = axis[divmod(idx, box_width)]
+
+        img = draw_bounding_boxes(
+            img,
+            boxes,
+            labels,
+        )
+
+        ax.imshow(to_pil_image(img))
+        if idx >= idx_last:
+            break
+    return fig, axis
+
+
+def _square_gallery_classification(
+    dataset: Dataset,
+    box_width: int,
+):
     fig, axis = plt.subplots(nrows=box_width, ncols=box_width)
     idx_last = box_width**2 - 1
     for idx, (img, label) in enumerate(dataset):
@@ -27,6 +86,10 @@ def square_gallery(dataset: Dataset, box_width: int) -> tuple[Figure, Axis]:
         if idx >= idx_last:
             break
     return fig, axis
+
+
+def _square_gallery_mask():
+    raise NotImplementedError()
 
 
 def confusion_matrix(data: torch.Tensor) -> tuple[Figure, Axis]:
